@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soirée Pyjama Invitation! 🌙</title>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts for the chic style -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- CORE AESTHETIC --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            /* Background: Warm, cozy glow similar to the image */
+            background: #1a0a1f; /* Base dark purple */
+            background-image: 
+                radial-gradient(circle at 50% 30%, #e09fbd 0%, transparent 40%), /* Warm pink glow */
+                radial-gradient(circle at 80% 80%, #ffd7a8 0%, transparent 30%); /* Golden glow */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .invitation-container {
+            width: 90%;
+            max-width: 400px; /* Mobile first profile */
+            background: rgba(26, 10, 31, 0.9); /* Dark semi-transparent background */
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(224, 159, 189, 0.4); /* Pink glow box shadow */
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: #ffd7a8;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(255, 215, 168, 0.7); /* Title glow */
+        }
+
+        .subtitle {
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-group {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            position: relative;
+            height: 60px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Glowing Pink "OUI" button */
+        #yesBtn {
+            background-color: #e09fbd;
+            color: #fff;
+            border: 2px solid #fff;
+            box-shadow: 0 0 15px rgba(224, 159, 189, 0.8);
+        }
+        #yesBtn:hover { transform: scale(1.05); }
+
+        /* Dark Purple "NON" button (The runaway one) */
+        #noBtn {
+            background-color: #8c4b7e;
+            color: rgba(255,255,255,0.8);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        /* --- PROGRAM SECTIONS --- */
+        #step-2 { display: none; } /* Initially hidden */
+
+        .section-title {
+            color: #ffd7a8;
+            font-size: 1.2rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(255, 215, 168, 0.5);
+        }
+
+        .program-item {
+            text-align: left;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+        .program-item span { margin-right: 10px; }
+
+        /* --- MOVIE GRID --- */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .movie-option {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: border 0.2s;
+        }
+        .movie-option:hover { border: 1px solid #e09fbd; }
+
+        .movie-poster-placeholder {
+            width: 100%;
+            height: 120px;
+            background: #2a1033; /* Darker purple */
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #8c4b7e;
+        }
+
+        .movie-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+        }
+        .movie-desc {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- DECORATIONS (The floating elements) --- */
+        .decor {
+            position: fixed;
+            opacity: 0.5;
+            z-index: 1;
+            pointer-events: none; /* Can't click them */
+        }
+        /* Positions of the floating elements from your image */
+        .mask1 { top: 15%; left: 10%; font-size: 2.5rem; }
+        .popcorn1 { bottom: 10%; right: 10%; font-size: 2.5rem; }
+        .candy1 { top: 40%; right: 5%; font-size: 1.5rem; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Floating Decorations (Emojis used for simplicity) -->
+    <div class="decor mask1">🌸</div>
+    <div class="decor popcorn1">🍿</div>
+    <div class="decor candy1">🍬</div>
+
+    <!-- Main Invitation Container -->
+    <div class="invitation-container">
+        
+        <!-- Screen 1: The Question -->
+        <div id="step-1">
+            <h1>Soirée Pyjama</h1>
+            <p class="subtitle">Chez Moi!</p>
+            <p>Viens-tu ce soir ?</p>
+            
+            <div class="btn-group">
+                <button id="yesBtn" onclick="acceptInvite()">OUI !</button>
+                <button id="noBtn" onmouseover="runAway()" onclick="runAway()">NON</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: The Program (Shown after 'Oui') -->
+        <div id="step-2">
+            <h1>🎈 Super ! 🎉</h1>
+            <p class="subtitle">On se voit ce soir.</p>
+            
+            <div class="section-title">Le Programme</div>
+            
+            <div class="program-item"><span>🛒</span> Phase 1 : Sortie snacks ensemble.</div>
+            <div class="program-item"><span>🎬</span> Phase 2 : Retour et grand film.</div>
+            <div class="program-item"><span>🤡</span> Phase 3 : Jokes, blagues et débats.</div>
+
+            <div class="section-title">Le Vote des Cinéphiles</div>
+            <p class="movie-desc">Choisis ton film préféré (Envoie-moi ton vote par SMS!) :</p>
+            
+            <div class="movie-grid">
+                <!-- Movie 1 -->
+                <div class="movie-option">
+                    <div class="movie-poster-placeholder">🎭</div>
+                    <div class="movie-title">The Truman Show</div>
+                    <div class="movie-desc">Classique & Mind-bending</div>
+                </div>
+                <!-- Movie 2 -->
+                <div class="movie-option">
+                    <div class="movie-poster-placeholder">🏢</div>
+                    <div class="movie-title">Inception</div>
+                    <div class="movie-desc">Rêve & Action</div>
+                </div>
+                <!-- Movie 3 -->
+                <div class="movie-option">
+                    <div class="movie-poster-placeholder">👸</div>
+                    <div class="movie-title">Princesse Mononoké</div>
+                    <div class="movie-desc">Animation & Aventure</div>
+                </div>
+                <!-- Movie 4 -->
+                <div class="movie-option">
+                    <div class="movie-poster-placeholder">🏠</div>
+                    <div class="movie-title">Parasite</div>
+                    <div class="movie-desc">Thriller & Comédie Noire</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+
+        // Function 1: Make the 'No' button run away
+        function runAway() {
+            // Calculate a random new position within the viewport
+            // 200px buffer ensures it stays mostly on screen
+            const x = Math.random() * (window.innerWidth - 200);
+            const y = Math.random() * (window.innerHeight - 200);
+            
+            // Switch to fixed position and apply the coordinates
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        }
+
+        // Function 2: What happens when they click 'Oui'
+        function acceptInvite() {
+            // Hide the question screen, show the details screen
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+            
+            // Trigger the Confetti explosion (lasts 3 seconds)
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                // Generate colorful confetti from random spots on screen
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: Math.random() },
+                    colors: ['#e09fbd', '#ffd7a8', '#ffffff'] // Matching pink/gold theme
+                });
+                
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
